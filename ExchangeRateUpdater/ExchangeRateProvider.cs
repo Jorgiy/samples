@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json.Linq;
+﻿using System.Collections.Generic;
 
 namespace ExchangeRateUpdater
 {
@@ -31,29 +28,18 @@ namespace ExchangeRateUpdater
         {
             foreach (var currency in currencies)
             {
-                JObject exchangeRateResponse;
-
-                try
+                var exchangeRateResponse = _currencyConverterApi.GetExchangeRate(new GetExchangeRateRequest
                 {
-                    exchangeRateResponse = _currencyConverterApi.GetExchangeRate(new GetExchangeRateRequest
-                    {
-                        Query = $"{_baseCurrency.Code}_{currency.Code}"
-                    }).Result;
-                }
-                catch (AggregateException e)
-                {
-                    throw new Exception(string.Join(", ", e.InnerExceptions.Select(x => x.Message)));
-                }
+                    Query = $"{_baseCurrency.Code}_{currency.Code}"
+                }).Result;
 
                 var exchangeRate =
                     _exchangeRateParser.ParseExchangeRateResponse(exchangeRateResponse,
                         $"{_baseCurrency.Code}_{currency.Code}");
-                
-                if (exchangeRate == null) continue;
 
                 // We ccould use this converter in another cases against one in Program.cs and it will be good to have
                 // opportunity to operate results till potential error occurs 
-                yield return new ExchangeRate(_baseCurrency, currency, exchangeRate.Value);
+                yield return new ExchangeRate(_baseCurrency, currency, exchangeRate);
             }
         }
     }

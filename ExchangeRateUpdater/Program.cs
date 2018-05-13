@@ -35,6 +35,11 @@ namespace ExchangeRateUpdater
                     Console.WriteLine(rate.ToString());
                 }
             }
+            catch (AggregateException e)
+            {
+                Console.WriteLine("Some errors occurred while retrieving exchange rates: " +
+                                  string.Join(", ", e.InnerExceptions.Select(x => x.Message)));
+            }
             catch (Exception e)
             {
                 Console.WriteLine("An error occurred while retrieving exchange rates: " + e.Message);

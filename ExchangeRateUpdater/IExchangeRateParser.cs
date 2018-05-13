@@ -4,6 +4,6 @@ namespace ExchangeRateUpdater
 {
     public interface IExchangeRateParser
     {
-        decimal? ParseExchangeRateResponse(JObject response, string rootObjectKey);
+        decimal ParseExchangeRateResponse(JObject response, string rootObjectKey);
     }
 }

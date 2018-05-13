@@ -6,11 +6,11 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateParser : IExchangeRateParser
     {
-        public decimal? ParseExchangeRateResponse(JObject response, string rootObjectKey)
+        public decimal ParseExchangeRateResponse(JObject response, string rootObjectKey)
         {
             if (!response.HasValues)
             {
-                return null;
+                throw new Exception($"Exchange rate resopnse is empty");
             }
             
             var rootElement = response.Root[rootObjectKey];
